@@ -7,40 +7,54 @@ from config import config
 def create_tables():
     """ create tables in the PostgreSQL database"""
     commands = (
+        "DROP TABLE IF EXISTS products CASCADE;",
+        "DROP TABLE IF EXISTS categories CASCADE;",
+        "DROP TABLE IF EXISTS reviews CASCADE;",
+        "DROP TABLE IF EXISTS similars CASCADE;",
+        "DROP TABLE IF EXISTS products_categories CASCADE;",
         """
-        CREATE TABLE vendors (
-            vendor_id SERIAL PRIMARY KEY,
-            vendor_name VARCHAR(255) NOT NULL
-        )
-        """,
-        """ 
-        CREATE TABLE parts (
-            part_id SERIAL PRIMARY KEY,
-            part_name VARCHAR(255) NOT NULL
-        )
-        """,
-        """
-        CREATE TABLE part_drawings (
-                part_id INTEGER PRIMARY KEY,
-                file_extension VARCHAR(5) NOT NULL,
-                drawing_data BYTEA NOT NULL,
-                FOREIGN KEY (part_id)
-                REFERENCES parts (part_id)
-                ON UPDATE CASCADE ON DELETE CASCADE
-        )
+        CREATE TABLE products (
+            id SERIAL PRIMARY KEY,
+            asin VARCHAR,
+            title VARCHAR(255),
+            "group" CHAR(5),
+            salesrank INTEGER,
+            reviews_downloaded INTEGER,
+            similar_amount INTEGER,
+            reviews_total INTEGER,
+            reviews_avg_rating REAL 
+        );
         """,
         """
-        CREATE TABLE vendor_parts (
-                vendor_id INTEGER NOT NULL,
-                part_id INTEGER NOT NULL,
-                PRIMARY KEY (vendor_id , part_id),
-                FOREIGN KEY (vendor_id)
-                    REFERENCES vendors (vendor_id)
-                    ON UPDATE CASCADE ON DELETE CASCADE,
-                FOREIGN KEY (part_id)
-                    REFERENCES parts (part_id)
-                    ON UPDATE CASCADE ON DELETE CASCADE
-        )
+        CREATE TABLE categories (
+            id INTEGER PRIMARY KEY,
+            hierarchy VARCHAR(255)
+        );
+        """,
+        """
+        CREATE TABLE reviews (
+            product_id INTEGER REFERENCES products(id),
+            time DATE,
+            customer_id CHAR(20),
+            rating INTEGER,
+            votes INTEGER,
+            helpfulness INTEGER,
+            PRIMARY KEY (product_id, time, customer_id)
+        );
+        """,
+        """
+        CREATE TABLE similars (
+            origin_product_id INTEGER REFERENCES products(id),
+            destiny_product_id INTEGER REFERENCES products(id),
+            PRIMARY KEY (origin_product_id, destiny_product_id)
+        );
+        """,
+        """
+        CREATE TABLE products_categories (
+            product_id INTEGER REFERENCES products(id),
+            category_id INTEGER REFERENCES categories(id),
+            PRIMARY KEY (product_id, category_id)
+        );
         """)
     conn = None
     try:
