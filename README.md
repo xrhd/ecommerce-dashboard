@@ -1,11 +1,14 @@
 # Demo on Ecommerce Dashboard 
 ![schema](doc/schema.jpg)
 
-## dependenies:
+## dependeies:
+ - [docker](https://www.docker.com/)
+ - [python](https://www.python.org/)
  - `sudo apt-get install python3-psycopg2`
+ - `pip install -r requirements.txt`
 
 ## dataset
- - input dataset [(link)](https://snap.stanford.edu/data/amazon-meta.html)
+ - [Amazon product co-purchasing network metadata](https://snap.stanford.edu/data/amazon-meta.html)
 
 ## postgres docker setup [(link)](https://hackernoon.com/dont-install-postgres-docker-pull-postgres-bee20e200198)
  - `mkdir -p $HOME/docker/volumes/postgres`
