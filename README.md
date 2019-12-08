@@ -16,3 +16,10 @@
  - `docker run --rm   --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres`
 
 ## connect to pg docker [(link)](http://www.postgresqltutorial.com/postgresql-python/connect/)
+ 
+ - edit credentials/database.ini
+
+ ## How to run
+ - start posgres docker
+ - edit your credentials
+ - finaly run: `jupyter lab` 
