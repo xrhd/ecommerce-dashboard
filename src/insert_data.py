@@ -1,25 +1,21 @@
 #!/usr/bin/python
  
+from tqdm import tqdm
 import psycopg2
-from config import config
- 
- 
-def insert_vendor_list(vendor_list):
-    """ insert multiple vendors into the vendors table  """
-    sql = "INSERT INTO vendors(vendor_name) VALUES(%s)"
+from src.config import config
+from psycopg2.extensions import AsIs
+
+def insert_from_dict(t_name, p_dict):
+    sql = f'insert into {t_name} (%s) values %s'
+    columns = p_dict.keys()
+    values = [p_dict[column] for column in columns]
     conn = None
     try:
-        # read database configuration
         params = config()
-        # connect to the PostgreSQL database
         conn = psycopg2.connect(**params)
-        # create a new cursor
         cur = conn.cursor()
-        # execute the INSERT statement
-        cur.executemany(sql,vendor_list)
-        # commit the changes to the database
+        cur.execute(sql, (AsIs(','.join(columns)), tuple(values)))
         conn.commit()
-        # close communication with the database
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -27,13 +23,26 @@ def insert_vendor_list(vendor_list):
         if conn is not None:
             conn.close()
 
-if __name__ == '__main__':
-    # insert multiple vendors
-    insert_vendor_list([
-        ('AKM Semiconductor Inc.',),
-        ('Asahi Glass Co Ltd.',),
-        ('Daikin Industries Ltd.',),
-        ('Dynacast International Inc.',),
-        ('Foster Electric Co. Ltd.',),
-        ('Murata Manufacturing Co. Ltd.',)
-    ])
+def insert_from_dict_gen(t_name, p_dicts):
+    sql = f'insert into {t_name} (%s) values %s'
+    conn = None
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+
+        for p_dict in tqdm(p_dicts):
+            columns = p_dict.keys()
+            values = [p_dict[column] for column in columns]
+            try:
+                cur.execute(sql, (AsIs(','.join(columns)), tuple(values)))
+            except:
+                continue
+
+        conn.commit()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
