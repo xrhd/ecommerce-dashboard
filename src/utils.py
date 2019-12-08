@@ -23,7 +23,7 @@ reviews = [
     'customer_id',
     'rating',
     'votes',
-    'helpfulness',
+    'helpful',
 ]
 
 schemas = {
