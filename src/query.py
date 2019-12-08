@@ -44,5 +44,12 @@ def q_a(id=0):
         'helpful',
     ]).sort_values('helpful', ascending=False)
 
+
+
+def q_c(id=0):
+    c = f'SELECT DISTINCT ON (time) time, AVG (rating) OVER (ORDER BY time) AS avg_rating FROM reviews WHERE product_id = {id} ORDER BY time DESC;'
+    c = pd.DataFrame(query(c), columns=['time', 'avg_rating']).sort_values('avg_rating', ascending=False)
+    c.avg_rating = pd.to_numeric(c.avg_rating)
+    return c
 # if __name__ == "__main__":
 #     print(q_a(8))
