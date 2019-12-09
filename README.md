@@ -1,5 +1,5 @@
 # Demo on Ecommerce Dashboard 
-![schema](doc/schema.jpg)
+![schema](doc/schema.png)
 
 ## dependeies:
  - [docker](https://www.docker.com/)
