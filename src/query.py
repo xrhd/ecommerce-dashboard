@@ -44,6 +44,9 @@ def q_a(id=0):
         'helpful',
     ]).sort_values('helpful', ascending=False)
 
+def q_b(id=0):
+    b = f'SELECT * FROM products p, products s, similiars WHERE p.id = {id} and similars.origin_product_id = {id} and s.id = similars.destiny_product_id and p.salesrank < s.salesrank;'
+    return pd.DataFrame(query(b))
 
 
 def q_c(id=0):
@@ -81,6 +84,18 @@ def q_e():
         'similar_amount',
         'reviews_total',
         'reviews_avg_rating'
+    ])
+
+def q_f():
+    f = 'SELECT categories.id, categories.hierarchy FROM products, categories, products_categories WHERE products.id = products_categories.product_id and categories.id = products_categories.category_id;'
+    return pd.DataFrame(query(f))
+
+def q_g():
+    g = 'SELECT x.customer_id, x.product_group, COUNT(*) OVER (PARTITION BY x.product_group) AS quantity FROM (SELECT customer_id, product_group FROM products, reviews WHERE products.id = reviews.product_id) x GROUP BY (x.customer_id, x.product_group)'
+    return pd.DataFrame(query(g),  columns=[
+        'customer_id',
+        'product_group',
+        'count'
     ])
 
 # if __name__ == "__main__":
