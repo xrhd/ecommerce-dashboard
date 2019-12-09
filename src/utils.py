@@ -4,7 +4,7 @@ products = [
     'id',
     'ASIN' ,
     'title' ,
-    '"group"' ,
+    "product_group" ,
     'salesrank',
     'reviews_downloaded',
     'similar_amount',

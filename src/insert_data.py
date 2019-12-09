@@ -34,10 +34,10 @@ def insert_from_dict_gen(t_name, p_dicts):
         for p_dict in tqdm(p_dicts):
             columns = p_dict.keys()
             values = [p_dict[column] for column in columns]
-            try:
-                cur.execute(sql, (AsIs(','.join(columns)), tuple(values)))
-            except:
-                continue
+            # try:
+            cur.execute(sql, (AsIs(','.join(columns)), tuple(values)))
+            # except:
+            #     continue
 
         conn.commit()
         cur.close()

@@ -51,5 +51,37 @@ def q_c(id=0):
     c = pd.DataFrame(query(c), columns=['time', 'avg_rating']).sort_values('avg_rating', ascending=False)
     c.avg_rating = pd.to_numeric(c.avg_rating)
     return c
+
+def q_d(n=10):
+#     d = f'SELECT * FROM (SELECT ROW_NUMBER() OVER (PARTITION BY product_group ORDER BY salesrank DESC) AS r, products.* FROM products) x WHERE x.r <= 10;'
+    d = 'SELECT * FROM (SELECT ROW_NUMBER() OVER (PARTITION BY product_group ORDER BY salesrank ASC) AS r, products.* FROM products) x WHERE x.r <= 10 and x.salesrank >= 0;'
+    d = pd.DataFrame(query(d), columns=[
+        'i',
+        'id',
+        'ASIN' ,
+        'title' ,
+        "product_group" ,
+        'salesrank',
+        'reviews_downloaded',
+        'similar_amount',
+        'reviews_total',
+        'reviews_avg_rating'
+    ]).sort_values('salesrank')
+    return d
+
+def q_e():
+    e = 'SELECT * FROM products WHERE reviews_avg_rating > 0 ORDER BY reviews_avg_rating DESC LIMIT 10;'
+    return pd.DataFrame(query(e), columns=[
+        'id',
+        'ASIN' ,
+        'title' ,
+        "product_group" ,
+        'salesrank',
+        'reviews_downloaded',
+        'similar_amount',
+        'reviews_total',
+        'reviews_avg_rating'
+    ])
+
 # if __name__ == "__main__":
 #     print(q_a(8))

@@ -17,7 +17,7 @@ def create_tables():
             id SERIAL PRIMARY KEY,
             asin VARCHAR,
             title VARCHAR(500),
-            "group" CHAR(5),
+            product_group VARCHAR(20),
             salesrank INTEGER,
             reviews_downloaded INTEGER,
             similar_amount INTEGER,
