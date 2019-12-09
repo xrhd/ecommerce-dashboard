@@ -22,4 +22,4 @@
  ## How to run
  - start posgres docker
  - edit your credentials
- - finaly run: `jupyter lab` 
+ - finaly run: `jupyter lab main.ipynb` 
